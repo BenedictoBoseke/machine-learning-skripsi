@@ -1,44 +1,37 @@
 import pandas as pd
 import numpy as np
 import sklearn
-from sklearn.ensemble import ExtraTreesClassifier
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import ExtraTreesClassifier, RandomForestClassifier
 from sklearn.metrics import confusion_matrix
 from sklearn.feature_selection import SelectFromModel
 from sklearn.model_selection import train_test_split
 
+malData = pd.read_csv("C:\\Users\\USER\\Desktop\\machine-learning-skripsi\\malware_dataset.csv", sep="|")
 
-malData = pd.read_csv("E:\machine-learning-skripsi\malware_dataset.csv", sep="|")
+legit = malData[0:41323].drop("legitimate", axis=1)
+mal = malData[41323::].drop("legitimate", axis=1)
 
-legit = malData[0:41323].drop(["legitimate"], axis=1)
-mal = malData[41323::].drop(["legitimate"], axis=1)
-
-pd.set_option("display.max_columns", None)
-
-
-data_in = malData.drop(['Name', 'md5', 'legitimate'], axis=1).values # hilangkan 3 kolom sementara karena tidak akan digunakan selama testing
+data_in = malData.drop(['Name', 'md5', 'legitimate'], axis=1).values
 labels = malData['legitimate'].values
+
 extraTrees = ExtraTreesClassifier().fit(data_in, labels)
-select = SelectFromModel(extraTrees, prefit = True)
+
+select = SelectFromModel(extraTrees, prefit=True)
 data_in_new = select.transform(data_in)
 
-features = data_in_new.shape[1]
-importances = extraTrees.feature_importances_
-indices = np.argsort(importances)[::-1]
-
 legit_train, legit_test, mal_train, mal_test = train_test_split(data_in_new, labels, test_size=0.2)
-classif = RandomForestClassifier(n_estimators=50)
 
+classif = RandomForestClassifier(n_estimators=50)
 classif.fit(legit_train, mal_train)
 
-# false positive
 results = classif.predict(legit_test)
 conf_mat = confusion_matrix(mal_test, results)
 
-# print false positive dan negative dengan mengambil data dari conf_mat
-print("False positives: ", conf_mat[0][1]/sum(conf_mat)[0]*100)
-print("False negatives: ", conf_mat[1][0]/sum(conf_mat)[1]*100)
+false_positives = conf_mat[0][1] / sum(conf_mat)[0] * 100
+false_negatives = conf_mat[1][0] / sum(conf_mat)[1] * 100
 
-# hitung akurasi algoritma yang digunakan oleh machine learning 
-print("Algorithm score: ", classif.score(legit_test, mal_test)*100)
+accuracy = classif.score(legit_test, mal_test) * 100
 
+print("False positives:", false_positives)
+print("False negatives:", false_negatives)
+print("Algorithm score:", accuracy)
