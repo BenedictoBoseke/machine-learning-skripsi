@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from sklearn.ensemble import ExtraTreesClassifier, RandomForestClassifier, GradientBoostingClassifier
-from sklearn.neighbors import KNeighborsClassifier  # Import the K-Nearest Neighbors classifier
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import confusion_matrix
 from sklearn.feature_selection import SelectFromModel
 from sklearn.model_selection import train_test_split
@@ -46,7 +46,7 @@ print("False negatives: ", conf_mat_gb[1][0] / sum(conf_mat_gb)[1] * 100)
 print("Algorithm score: ", classif_gb.score(legit_test, mal_test) * 100)
 
 # K-Nearest Neighbors (KNN) Classifier
-classif_knn = KNeighborsClassifier(n_neighbors=5)  # You can specify the number of neighbors
+classif_knn = KNeighborsClassifier(n_neighbors=5)
 classif_knn.fit(legit_train, mal_train)
 
 results_knn = classif_knn.predict(legit_test)
