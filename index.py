@@ -1,5 +1,5 @@
 import pandas as pd
-import numpy as np  # Import NumPy for random seed
+import numpy as np
 import time
 from sklearn.ensemble import ExtraTreesClassifier, RandomForestClassifier, GradientBoostingClassifier
 from sklearn.neighbors import KNeighborsClassifier
@@ -8,7 +8,7 @@ from sklearn.feature_selection import SelectFromModel
 from sklearn.model_selection import train_test_split
 start_time = time.time()
 
-# Set the random seed for reproducibility
+# Set the random seed
 np.random.seed(42)
 
 malData = pd.read_csv("C:\\Users\\USER\\Desktop\\machine-learning-skripsi\\malware_dataset.csv", sep="|")
