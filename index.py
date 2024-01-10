@@ -8,10 +8,9 @@ from sklearn.feature_selection import SelectFromModel
 from sklearn.model_selection import train_test_split
 start_time = time.time()
 
-# Set the random seed
 np.random.seed(42)
 
-malData = pd.read_csv("C:\\Users\\USER\\Desktop\\machine-learning-skripsi\\malware_dataset.csv", sep="|")
+malData = pd.read_csv("malware_dataset.csv", sep="|")
 
 legit = malData.iloc[0:41323].drop(["legitimate"], axis=1)
 mal = malData.iloc[41323:].drop(["legitimate"], axis=1)

@@ -1,67 +1,21 @@
-import pandas as pd
-import numpy as np  # Import NumPy for random seed
+# link = https://machinelearningmastery.com/evaluate-performance-machine-learning-algorithms-python-using-resampling/
+
+# Evaluate using Shuffle Split Cross Validation
+import pandas
+from sklearn import model_selection
+from sklearn.linear_model import LogisticRegression
 import time
-from sklearn.ensemble import ExtraTreesClassifier, RandomForestClassifier, GradientBoostingClassifier
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import confusion_matrix
-from sklearn.feature_selection import SelectFromModel
-from sklearn.model_selection import train_test_split
-
 start_time = time.time()
-
-# Set the random seed for reproducibility
-np.random.seed(42)
-
-malData = pd.read_csv("C:\\Users\\USER\\Desktop\\machine-learning-skripsi\\malware_dataset.csv", sep="|")
-
-legit = malData.iloc[0:41323].drop(["legitimate"], axis=1)
-mal = malData.iloc[41323:].drop(["legitimate"], axis=1)
-
-data_in = malData.drop(['Name', 'md5', 'legitimate'], axis=1).values
-labels = malData['legitimate'].values
-
-extraTrees = ExtraTreesClassifier().fit(data_in, labels)
-
-select = SelectFromModel(extraTrees, prefit=True)
-data_in_new = select.transform(data_in)
-
-# Use a fixed random state for train-test splitting
-legit_train, legit_test, mal_train, mal_test = train_test_split(data_in_new, labels, test_size=0.2, random_state=42)
-
-# Random Forest Classifier with a fixed random state
-classif_rf = RandomForestClassifier(n_estimators=50, random_state=42)
-classif_rf.fit(legit_train, mal_train)
-
-results_rf = classif_rf.predict(legit_test)
-conf_mat_rf = confusion_matrix(mal_test, results_rf)
-
-print("Random Forest Classifier:")
-print("False positives: ", conf_mat_rf[0][1] / sum(conf_mat_rf)[0] * 100)
-print("False negatives: ", conf_mat_rf[1][0] / sum(conf_mat_rf)[1] * 100)
-print("Algorithm score: ", classif_rf.score(legit_test, mal_test) * 100)
-
-# Gradient Boosting Classifier
-classif_gb = GradientBoostingClassifier(n_estimators=50)
-classif_gb.fit(legit_train, mal_train)
-
-results_gb = classif_gb.predict(legit_test)
-conf_mat_gb = confusion_matrix(mal_test, results_gb)
-
-print("\nGradient Boosting Classifier:")
-print("False positives: ", conf_mat_gb[0][1] / sum(conf_mat_gb)[0] * 100)
-print("False negatives: ", conf_mat_gb[1][0] / sum(conf_mat_gb)[1] * 100)
-print("Algorithm score: ", classif_gb.score(legit_test, mal_test) * 100)
-
-# K-Nearest Neighbors (KNN) Classifier
-classif_knn = KNeighborsClassifier(n_neighbors=5)
-classif_knn.fit(legit_train, mal_train)
-
-results_knn = classif_knn.predict(legit_test)
-conf_mat_knn = confusion_matrix(mal_test, results_knn)
-
-print("\nK-Nearest Neighbors (KNN) Classifier:")
-print("False positives: ", conf_mat_knn[0][1] / sum(conf_mat_knn)[0] * 100)
-print("False negatives: ", conf_mat_knn[1][0] / sum(conf_mat_knn)[1] * 100)
-print("Algorithm score: ", classif_knn.score(legit_test, mal_test) * 100)
-
+url = "https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.csv"
+names = ['preg', 'plas', 'pres', 'skin', 'test', 'mass', 'pedi', 'age', 'class']
+dataframe = pandas.read_csv(url, names=names)
+array = dataframe.values
+X = array[:,0:8]
+Y = array[:,8]
+test_size = 0.33
+seed = 42
+kfold = model_selection.ShuffleSplit(n_splits=10, test_size=test_size, random_state=seed)
+model = LogisticRegression()
+results = model_selection.cross_val_score(model, X, Y, cv=kfold)
+print("Accuracy: %.3f%% (%.3f%%)" % (results.mean()*100.0, results.std()*100.0))
 print("Process finished --- %s seconds ---" % (time.time() - start_time))
