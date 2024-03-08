@@ -12,9 +12,6 @@ np.random.seed(42)
 
 malData = pd.read_csv("malware_dataset.csv", sep="|")
 
-legit = malData.iloc[0:41323].drop(["legitimate"], axis=1)
-mal = malData.iloc[41323:].drop(["legitimate"], axis=1)
-
 data_in = malData.drop(['Name', 'md5', 'legitimate'], axis=1).values
 labels = malData['legitimate'].values
 
