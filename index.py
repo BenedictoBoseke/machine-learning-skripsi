@@ -3,6 +3,7 @@ import numpy as np
 import time
 from sklearn.ensemble import ExtraTreesClassifier, RandomForestClassifier, GradientBoostingClassifier
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import confusion_matrix
 from sklearn.feature_selection import SelectFromModel
 from sklearn.model_selection import train_test_split
@@ -34,8 +35,8 @@ print("False positives: ", conf_mat_rf[0][1] / sum(conf_mat_rf)[0] * 100)
 print("False negatives: ", conf_mat_rf[1][0] / sum(conf_mat_rf)[1] * 100)
 print("Algorithm score: ", classif_rf.score(legit_test, mal_test) * 100)
 
-# Gradient Boosting Classifier
-classif_gb = GradientBoostingClassifier(n_estimators=50)
+# Decision Tree Classifier
+classif_gb = DecisionTreeClassifier(random_state=0)
 classif_gb.fit(legit_train, mal_train)
 
 results_gb = classif_gb.predict(legit_test)
