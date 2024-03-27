@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import time
-from sklearn.ensemble import ExtraTreesClassifier, RandomForestClassifier, GradientBoostingClassifier
+from sklearn.ensemble import ExtraTreesClassifier, RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import confusion_matrix
@@ -42,7 +42,7 @@ classif_gb.fit(legit_train, mal_train)
 results_gb = classif_gb.predict(legit_test)
 conf_mat_gb = confusion_matrix(mal_test, results_gb)
 
-print("\nGradient Boosting Classifier:")
+print("\nDecision Tree Classifier:")
 print("False positives: ", conf_mat_gb[0][1] / sum(conf_mat_gb)[0] * 100)
 print("False negatives: ", conf_mat_gb[1][0] / sum(conf_mat_gb)[1] * 100)
 print("Algorithm score: ", classif_gb.score(legit_test, mal_test) * 100)

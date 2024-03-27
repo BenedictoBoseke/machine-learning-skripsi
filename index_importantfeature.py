@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 from sklearn.ensemble import ExtraTreesClassifier
-# pake module sama class dibawah
 from sklearn.feature_selection import SelectFromModel
 
 malData = pd.read_csv("malware_dataset.csv", sep="|")
